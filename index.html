@@ -361,6 +361,40 @@ code {
   .indy-card { grid-template-columns: 1fr; }
   .main { padding: 16px; }
 }
+
+/* ── RUN DETAIL MODAL ────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(45,27,61,0.55);
+  backdrop-filter: blur(4px);
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: var(--bg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 64px rgba(45,27,61,0.35);
+  width: 100%; max-width: 480px;
+  max-height: 88vh; overflow-y: auto;
+  padding: 28px;
+  position: relative;
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn {
+  from { opacity:0; transform:scale(0.95) translateY(8px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--bg-2); border: 1px solid var(--border);
+  font-size: 14px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  color: var(--text-muted); transition: all 0.15s;
+}
+.modal-close:hover { background: var(--pink-light); color: var(--pink); border-color: var(--pink-mid); }
+.run-row:hover td { background: var(--bg-2) !important; }
 </style>
 </head>
 <body>
@@ -778,10 +812,19 @@ code {
   </div>
 </div>
 
+
+<!-- RUN DETAIL MODAL -->
+<div class="modal-overlay" id="run-detail-modal" onclick="if(event.target===this)closeRunDetail()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeRunDetail()">✕</button>
+    <div id="run-detail-content"></div>
+  </div>
+</div>
 </main>
 </div>
 
 <script>
+
 
 const SEED_MONTHLY = [{"month":"2023-01","miles":90.62,"runs":17,"avg_hr":"","avg_pace_secs":""},{"month":"2023-02","miles":96.82,"runs":17,"avg_hr":151.25,"avg_pace_secs":483.25},{"month":"2023-03","miles":141.57,"runs":19,"avg_hr":157.0,"avg_pace_secs":466.8},{"month":"2023-04","miles":103.5,"runs":16,"avg_hr":157.0,"avg_pace_secs":467.44},{"month":"2023-05","miles":73.72,"runs":15,"avg_hr":159.67,"avg_pace_secs":476.0},{"month":"2023-06","miles":96.6,"runs":17,"avg_hr":146.0,"avg_pace_secs":514.12},{"month":"2023-07","miles":88.42,"runs":16,"avg_hr":146.08,"avg_pace_secs":501.75},{"month":"2023-08","miles":112.75,"runs":17,"avg_hr":145.06,"avg_pace_secs":481.0},{"month":"2023-09","miles":35.79,"runs":10,"avg_hr":145.3,"avg_pace_secs":478.0},{"month":"2023-10","miles":15.88,"runs":5,"avg_hr":126.8,"avg_pace_secs":""},{"month":"2023-11","miles":32.15,"runs":7,"avg_hr":129.71,"avg_pace_secs":""},{"month":"2023-12","miles":79.69,"runs":18,"avg_hr":134.22,"avg_pace_secs":""},{"month":"2024-01","miles":107.2,"runs":18,"avg_hr":138.11,"avg_pace_secs":480.0},{"month":"2024-02","miles":83.37,"runs":14,"avg_hr":141.79,"avg_pace_secs":488.0},{"month":"2024-03","miles":56.22,"runs":16,"avg_hr":143.25,"avg_pace_secs":490.0},{"month":"2024-04","miles":58.7,"runs":13,"avg_hr":141.92,"avg_pace_secs":478.0},{"month":"2024-05","miles":55.9,"runs":15,"avg_hr":143.6,"avg_pace_secs":475.0},{"month":"2024-06","miles":11.35,"runs":10,"avg_hr":132.9,"avg_pace_secs":""},{"month":"2024-07","miles":24.8,"runs":14,"avg_hr":139.0,"avg_pace_secs":""},{"month":"2024-08","miles":71.16,"runs":14,"avg_hr":141.43,"avg_pace_secs":477.0},{"month":"2024-09","miles":65.34,"runs":12,"avg_hr":141.42,"avg_pace_secs":476.0},{"month":"2024-10","miles":97.05,"runs":14,"avg_hr":145.5,"avg_pace_secs":458.0},{"month":"2024-11","miles":61.51,"runs":10,"avg_hr":145.8,"avg_pace_secs":462.0},{"month":"2024-12","miles":38.59,"runs":8,"avg_hr":140.5,"avg_pace_secs":462.0},{"month":"2025-01","miles":81.2,"runs":14,"avg_hr":140.86,"avg_pace_secs":481.0},{"month":"2025-02","miles":83.16,"runs":14,"avg_hr":143.5,"avg_pace_secs":487.0},{"month":"2025-03","miles":73.84,"runs":17,"avg_hr":142.25,"avg_pace_secs":480.0},{"month":"2025-04","miles":76.53,"runs":17,"avg_hr":140.94,"avg_pace_secs":479.0},{"month":"2025-05","miles":81.01,"runs":13,"avg_hr":143.15,"avg_pace_secs":479.0},{"month":"2025-06","miles":39.79,"runs":9,"avg_hr":141.33,"avg_pace_secs":483.0},{"month":"2025-07","miles":66.9,"runs":14,"avg_hr":141.0,"avg_pace_secs":479.0},{"month":"2025-08","miles":111.36,"runs":16,"avg_hr":143.33,"avg_pace_secs":469.0},{"month":"2025-09","miles":142.92,"runs":21,"avg_hr":142.52,"avg_pace_secs":466.0},{"month":"2025-10","miles":150.92,"runs":17,"avg_hr":143.1,"avg_pace_secs":468.0},{"month":"2025-11","miles":164.08,"runs":21,"avg_hr":142.9,"avg_pace_secs":459.0},{"month":"2025-12","miles":28.29,"runs":9,"avg_hr":134.1,"avg_pace_secs":462.0},{"month":"2026-01","miles":41.0,"runs":10,"avg_hr":141.3,"avg_pace_secs":454.0},{"month":"2026-02","miles":92.74,"runs":20,"avg_hr":137.7,"avg_pace_secs":481.0},{"month":"2026-03","miles":130.53,"runs":21,"avg_hr":136.1,"avg_pace_secs":470.0},{"month":"2026-04","miles":122.22,"runs":19,"avg_hr":141.1,"avg_pace_secs":472.0},{"month":"2026-05","miles":119.69,"runs":20,"avg_hr":140.5,"avg_pace_secs":458.0}];
 
@@ -1088,6 +1131,13 @@ let STATE = loadState();
 let pendingImport = null;
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
+function secsToHMS(s) {
+  if (!s) return '';
+  s = Math.round(s);
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+  if (h) return h+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  return m+':'+String(sec).padStart(2,'0');
+}
 function secsToStr(s) {
   if (!s || s === '') return '—';
   s = parseInt(s); if (isNaN(s) || s <= 0) return '—';
@@ -1316,17 +1366,23 @@ function renderRunLog() {
   });
   const FEELS=['','😞','😕','😐','🙂','😄'];
   const tbody=document.getElementById('run-log-body');
-  tbody.innerHTML=filtered.slice(0,200).map(r=>{
+  tbody.innerHTML=filtered.slice(0,200).map((r,i)=>{
     const note=getWorkoutNote(r.date_str);
     const feel=note?.feel?FEELS[note.feel]:'';
-    const noteSnip=note?.notes?note.notes.slice(0,40)+(note.notes.length>40?'…':''):'';
+    const noteSnip=note?.notes?note.notes.slice(0,35)+(note.notes.length>35?'…':''):'';
     const wtype=note?.workout_type||'';
-    return `<tr>
-      <td>${r.date_str}</td><td><strong>${Math.round(r.distance_mi*100)/100}</strong></td>
-      <td>${r.avg_pace||'—'}</td><td>${r.avg_hr?Math.round(r.avg_hr):'—'}</td>
+    const rid=r.date_str+'_'+Math.round(r.distance_mi*10);
+    return `<tr style="cursor:pointer" onclick="openRunDetail('${rid}')" class="run-row">
+      <td>${r.date_str}</td>
+      <td><strong>${Math.round(r.distance_mi*100)/100}</strong></td>
+      <td>${r.avg_pace||'—'}</td>
+      <td>${r.avg_hr?Math.round(r.avg_hr):'—'}</td>
       <td style="font-size:18px">${feel}</td>
-      <td style="font-size:12px;color:var(--text-muted);max-width:180px">${wtype?`<span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--text-hint);margin-right:4px">${wtype}</span>`:''}${noteSnip}</td>
-      <td><button class="btn" style="padding:4px 10px;font-size:11px" onclick="openWorkoutNoteFor('${r.date_str}')">+ Note</button></td>
+      <td style="font-size:12px;color:var(--text-muted);max-width:160px">${wtype?`<span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--text-hint);margin-right:4px">${wtype}</span>`:''}${noteSnip}</td>
+      <td onclick="event.stopPropagation()" style="white-space:nowrap">
+        <button class="btn" style="padding:3px 9px;font-size:11px;margin-right:4px" onclick="openWorkoutNoteFor('${r.date_str}')">+ Note</button>
+        <button class="btn" style="padding:3px 8px;font-size:11px;color:var(--pink)" onclick="deleteRun('${rid}')">✕</button>
+      </td>
     </tr>`;
   }).join('');
   const label=document.getElementById('run-count-label');
@@ -1413,10 +1469,24 @@ function applyImport() {
     .filter(a => !existing.has(a.date_str+'_'+Math.round(a.distance_mi*10)))
     .map(a => ({
       date_str: a.date_str,
+      start_time: a.start_time || '',
       distance_mi: a.distance_mi,
       avg_pace: a.avg_pace,
-      avg_hr: a.avg_hr,
+      max_pace: a.max_pace || '',
       pace_secs: a.pace_secs,
+      avg_hr: a.avg_hr,
+      max_hr: a.max_hr || null,
+      avg_cadence_spm: a.avg_cadence_spm || null,
+      total_calories: a.total_calories || null,
+      elevation_gain_ft: a.elevation_gain_ft || 0,
+      elevation_loss_ft: a.elevation_loss_ft || 0,
+      duration: a.total_timer_time ? secsToHMS(a.total_timer_time) : '',
+      training_effect: a.training_effect || null,
+      num_laps: a.num_laps || null,
+      name: a.name || '',
+      source: a.source || '',
+      sport: a.sport || 'running',
+      sub_sport: a.sub_sport || '',
     }));
 
   const allRuns = [...(STATE.all_runs||STATE.recent_runs), ...newRuns]
@@ -2215,10 +2285,152 @@ function initOuraPage() {
   fetchOuraData();
 }
 
+
+// ─── RUN DETAIL & DELETE ─────────────────────────────────────────────────────
+function runId(r) {
+  return r.date_str + '_' + Math.round(r.distance_mi * 10);
+}
+
+function openRunDetail(rid) {
+  const all = STATE.all_runs || STATE.recent_runs;
+  const r = all.find(x => runId(x) === rid);
+  if (!r) return;
+
+  const note = getWorkoutNote(r.date_str);
+  const dailyNote = getDailyNote(r.date_str);
+  const FEELS = ['','😞 Terrible','😕 Bad','😐 OK','🙂 Good','😄 Great'];
+  const FEEL_COLORS = ['','var(--pink-dark)','var(--amber)','var(--text-hint)','var(--teal)','var(--teal)'];
+
+  function row(label, val, highlight) {
+    if (!val && val !== 0) return '';
+    return `<div style="display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-hint)">${label}</span>
+      <span style="font-size:13px;font-weight:${highlight?'600':'400'};color:var(--text)">${val}</span>
+    </div>`;
+  }
+
+  const html = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
+      <div>
+        <div style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--text);letter-spacing:-0.4px">
+          ${r.name || (r.distance_mi >= 13 ? 'Long Run' : r.distance_mi <= 5 ? 'Easy Run' : 'Run')}
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:3px">${r.start_time || r.date_str}${r.source ? ' · '+r.source : ''}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--font-display);font-size:32px;font-weight:600;color:var(--pink);letter-spacing:-1px">${Math.round(r.distance_mi*100)/100}</div>
+        <div style="font-size:11px;color:var(--text-hint)">miles</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
+      ${r.avg_pace ? `<div style="background:var(--pink-light);border-radius:var(--radius);padding:12px;text-align:center"><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--pink-dark);margin-bottom:4px">Avg pace</div><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--text)">${r.avg_pace}</div><div style="font-size:10px;color:var(--text-hint)">min/mi</div></div>` : ''}
+      ${r.avg_hr ? `<div style="background:var(--purple-light);border-radius:var(--radius);padding:12px;text-align:center"><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--purple-dark);margin-bottom:4px">Avg HR</div><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--text)">${Math.round(r.avg_hr)}</div><div style="font-size:10px;color:var(--text-hint)">bpm</div></div>` : ''}
+      ${r.duration ? `<div style="background:var(--bg-2);border-radius:var(--radius);padding:12px;text-align:center"><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-hint);margin-bottom:4px">Duration</div><div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--text)">${r.duration}</div><div style="font-size:10px;color:var(--text-hint)">moving time</div></div>` : ''}
+    </div>
+
+    <div style="margin-bottom:20px">
+      ${row('Max pace', r.max_pace ? r.max_pace+'/mi' : null)}
+      ${row('Max HR', r.max_hr ? Math.round(r.max_hr)+' bpm' : null)}
+      ${row('Avg cadence', r.avg_cadence_spm ? r.avg_cadence_spm+' spm' : null)}
+      ${row('Elevation gain', r.elevation_gain_ft ? r.elevation_gain_ft+' ft' : null)}
+      ${row('Calories', r.total_calories ? r.total_calories+' kcal' : null)}
+      ${row('Training effect', r.training_effect || null)}
+      ${row('Laps', r.num_laps || null)}
+      ${row('Type', r.sub_sport && r.sub_sport !== 'generic' ? r.sub_sport.replace(/_/g,' ') : null)}
+    </div>
+
+    ${note ? `<div style="background:var(--pink-light);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--pink-dark);margin-bottom:8px">Workout note</div>
+      ${note.feel ? `<div style="font-size:16px;margin-bottom:6px;color:${FEEL_COLORS[note.feel]}">${FEELS[note.feel]}${note.rpe ? ' · RPE '+note.rpe : ''}</div>` : ''}
+      ${note.workout_type ? `<div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text-hint);margin-bottom:4px">${note.workout_type}</div>` : ''}
+      ${note.notes ? `<div style="font-size:13px;color:var(--text);line-height:1.6">${note.notes}</div>` : ''}
+    </div>` : `<button class="btn" style="width:100%;justify-content:center;margin-bottom:12px" onclick="closeRunDetail();openWorkoutNoteFor('${r.date_str}')">+ Add workout note</button>`}
+
+    ${dailyNote ? `<div style="background:var(--purple-light);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--purple-dark);margin-bottom:8px">Daily note · ${r.date_str}</div>
+      ${dailyNote.nutrition ? `<div style="margin-bottom:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--text-hint)">Nutrition · </span><span style="font-size:13px;color:var(--text)">${dailyNote.nutrition}</span></div>` : ''}
+      ${dailyNote.feel ? `<div style="margin-bottom:6px"><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--text-hint)">Feel · </span><span style="font-size:13px;color:var(--text)">${dailyNote.feel}</span></div>` : ''}
+      ${dailyNote.notes ? `<div><span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--text-hint)">Notes · </span><span style="font-size:13px;color:var(--text)">${dailyNote.notes}</span></div>` : ''}
+    </div>` : ''}
+
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn" style="flex:1;justify-content:center" onclick="closeRunDetail();openWorkoutNoteFor('${r.date_str}')">
+        ✏️ ${note ? 'Edit note' : 'Add note'}
+      </button>
+      <button class="btn" style="color:var(--pink);border-color:var(--pink-mid)" onclick="deleteRun('${rid}', true)">
+        🗑 Delete run
+      </button>
+    </div>`;
+
+  document.getElementById('run-detail-content').innerHTML = html;
+  document.getElementById('run-detail-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRunDetail() {
+  document.getElementById('run-detail-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function deleteRun(rid, fromModal) {
+  if (!confirm('Delete this run from your log?')) return;
+  const all = STATE.all_runs || STATE.recent_runs;
+  STATE.all_runs = all.filter(r => runId(r) !== rid);
+  STATE.recent_runs = STATE.all_runs.slice(-50);
+
+  // Rebuild monthly/weekly/year from remaining runs
+  rebuildAggregates();
+  saveState(STATE);
+
+  if (fromModal) closeRunDetail();
+  renderRunLog();
+}
+
+function rebuildAggregates() {
+  const allRuns = STATE.all_runs || [];
+  const monthMap = {}, weekMap = {}, yearMap = {};
+  allRuns.forEach(r => {
+    const month = r.date_str.slice(0,7);
+    if (!monthMap[month]) monthMap[month] = { month, miles:0, runs:0, hrs:[], paces:[] };
+    monthMap[month].miles += r.distance_mi;
+    monthMap[month].runs++;
+    if (r.avg_hr) monthMap[month].hrs.push(r.avg_hr);
+    if (r.pace_secs && r.pace_secs > 0) monthMap[month].paces.push(r.pace_secs);
+
+    const d = new Date(r.date_str);
+    const dow = d.getDay();
+    const mon = new Date(d); mon.setDate(d.getDate() - (dow===0?6:dow-1));
+    const wk = mon.toISOString().slice(0,10);
+    if (!weekMap[wk]) weekMap[wk] = { week_start:wk, miles:0 };
+    weekMap[wk].miles += r.distance_mi;
+
+    const yr = parseInt(r.date_str.slice(0,4));
+    if (!yearMap[yr]) yearMap[yr] = { year:yr, miles:0, runs:0, hrs:[] };
+    yearMap[yr].miles += r.distance_mi;
+    yearMap[yr].runs++;
+    if (r.avg_hr) yearMap[yr].hrs.push(r.avg_hr);
+  });
+
+  STATE.monthly = Object.values(monthMap).sort((a,b)=>a.month.localeCompare(b.month))
+    .map(m=>({ month:m.month, miles:Math.round(m.miles*100)/100, runs:m.runs,
+      avg_hr: m.hrs.length ? Math.round(avg(m.hrs)*10)/10 : '',
+      avg_pace_secs: m.paces.length ? Math.round(avg(m.paces)) : '' }));
+  STATE.weekly = Object.values(weekMap).sort((a,b)=>a.week_start.localeCompare(b.week_start))
+    .map(w=>({ week_start:w.week_start, miles:Math.round(w.miles*100)/100 }));
+  STATE.year_totals = Object.values(yearMap).sort((a,b)=>a.year-b.year)
+    .map(y=>({ year:y.year, miles:Math.round(y.miles*10)/10, runs:y.runs,
+      avg_hr: y.hrs.length ? Math.round(avg(y.hrs)*10)/10 : '' }));
+  STATE.long_runs = allRuns.filter(r=>r.distance_mi>=10).sort((a,b)=>a.date_str.localeCompare(b.date_str))
+    .slice(-30).map(r=>({ date_str:r.date_str, distance_mi:r.distance_mi,
+      avg_pace:r.avg_pace, avg_hr:r.avg_hr, elevation_gain_ft:r.elevation_gain_ft||0 }));
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 updateCountdown();
 buildOverview();
 setInterval(updateCountdown, 60000);
+
 </script>
 </body>
 </html>
