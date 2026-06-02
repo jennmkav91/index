@@ -826,6 +826,7 @@ code {
 <script>
 
 
+
 const SEED_MONTHLY = [{"month":"2023-01","miles":90.62,"runs":17,"avg_hr":"","avg_pace_secs":""},{"month":"2023-02","miles":96.82,"runs":17,"avg_hr":151.25,"avg_pace_secs":483.25},{"month":"2023-03","miles":141.57,"runs":19,"avg_hr":157.0,"avg_pace_secs":466.8},{"month":"2023-04","miles":103.5,"runs":16,"avg_hr":157.0,"avg_pace_secs":467.44},{"month":"2023-05","miles":73.72,"runs":15,"avg_hr":159.67,"avg_pace_secs":476.0},{"month":"2023-06","miles":96.6,"runs":17,"avg_hr":146.0,"avg_pace_secs":514.12},{"month":"2023-07","miles":88.42,"runs":16,"avg_hr":146.08,"avg_pace_secs":501.75},{"month":"2023-08","miles":112.75,"runs":17,"avg_hr":145.06,"avg_pace_secs":481.0},{"month":"2023-09","miles":35.79,"runs":10,"avg_hr":145.3,"avg_pace_secs":478.0},{"month":"2023-10","miles":15.88,"runs":5,"avg_hr":126.8,"avg_pace_secs":""},{"month":"2023-11","miles":32.15,"runs":7,"avg_hr":129.71,"avg_pace_secs":""},{"month":"2023-12","miles":79.69,"runs":18,"avg_hr":134.22,"avg_pace_secs":""},{"month":"2024-01","miles":107.2,"runs":18,"avg_hr":138.11,"avg_pace_secs":480.0},{"month":"2024-02","miles":83.37,"runs":14,"avg_hr":141.79,"avg_pace_secs":488.0},{"month":"2024-03","miles":56.22,"runs":16,"avg_hr":143.25,"avg_pace_secs":490.0},{"month":"2024-04","miles":58.7,"runs":13,"avg_hr":141.92,"avg_pace_secs":478.0},{"month":"2024-05","miles":55.9,"runs":15,"avg_hr":143.6,"avg_pace_secs":475.0},{"month":"2024-06","miles":11.35,"runs":10,"avg_hr":132.9,"avg_pace_secs":""},{"month":"2024-07","miles":24.8,"runs":14,"avg_hr":139.0,"avg_pace_secs":""},{"month":"2024-08","miles":71.16,"runs":14,"avg_hr":141.43,"avg_pace_secs":477.0},{"month":"2024-09","miles":65.34,"runs":12,"avg_hr":141.42,"avg_pace_secs":476.0},{"month":"2024-10","miles":97.05,"runs":14,"avg_hr":145.5,"avg_pace_secs":458.0},{"month":"2024-11","miles":61.51,"runs":10,"avg_hr":145.8,"avg_pace_secs":462.0},{"month":"2024-12","miles":38.59,"runs":8,"avg_hr":140.5,"avg_pace_secs":462.0},{"month":"2025-01","miles":81.2,"runs":14,"avg_hr":140.86,"avg_pace_secs":481.0},{"month":"2025-02","miles":83.16,"runs":14,"avg_hr":143.5,"avg_pace_secs":487.0},{"month":"2025-03","miles":73.84,"runs":17,"avg_hr":142.25,"avg_pace_secs":480.0},{"month":"2025-04","miles":76.53,"runs":17,"avg_hr":140.94,"avg_pace_secs":479.0},{"month":"2025-05","miles":81.01,"runs":13,"avg_hr":143.15,"avg_pace_secs":479.0},{"month":"2025-06","miles":39.79,"runs":9,"avg_hr":141.33,"avg_pace_secs":483.0},{"month":"2025-07","miles":66.9,"runs":14,"avg_hr":141.0,"avg_pace_secs":479.0},{"month":"2025-08","miles":111.36,"runs":16,"avg_hr":143.33,"avg_pace_secs":469.0},{"month":"2025-09","miles":142.92,"runs":21,"avg_hr":142.52,"avg_pace_secs":466.0},{"month":"2025-10","miles":150.92,"runs":17,"avg_hr":143.1,"avg_pace_secs":468.0},{"month":"2025-11","miles":164.08,"runs":21,"avg_hr":142.9,"avg_pace_secs":459.0},{"month":"2025-12","miles":28.29,"runs":9,"avg_hr":134.1,"avg_pace_secs":462.0},{"month":"2026-01","miles":41.0,"runs":10,"avg_hr":141.3,"avg_pace_secs":454.0},{"month":"2026-02","miles":92.74,"runs":20,"avg_hr":137.7,"avg_pace_secs":481.0},{"month":"2026-03","miles":130.53,"runs":21,"avg_hr":136.1,"avg_pace_secs":470.0},{"month":"2026-04","miles":122.22,"runs":19,"avg_hr":141.1,"avg_pace_secs":472.0},{"month":"2026-05","miles":119.69,"runs":20,"avg_hr":140.5,"avg_pace_secs":458.0}];
 
 const SEED_WEEKLY = [{"week_start":"2025-07-07","miles":20.32},{"week_start":"2025-07-14","miles":13.53},{"week_start":"2025-07-21","miles":11.45},{"week_start":"2025-07-28","miles":18.1},{"week_start":"2025-08-04","miles":25.62},{"week_start":"2025-08-11","miles":25.63},{"week_start":"2025-08-18","miles":28.65},{"week_start":"2025-08-25","miles":31.46},{"week_start":"2025-09-01","miles":36.29},{"week_start":"2025-09-08","miles":35.1},{"week_start":"2025-09-15","miles":34.92},{"week_start":"2025-09-22","miles":31.95},{"week_start":"2025-09-29","miles":40.66},{"week_start":"2025-10-06","miles":38.12},{"week_start":"2025-10-13","miles":38.4},{"week_start":"2025-10-20","miles":45.07},{"week_start":"2025-10-27","miles":48.05},{"week_start":"2025-11-03","miles":35.02},{"week_start":"2025-11-10","miles":42.03},{"week_start":"2025-11-17","miles":30.48},{"week_start":"2025-11-24","miles":36.54},{"week_start":"2025-12-01","miles":10.73},{"week_start":"2025-12-15","miles":4.0},{"week_start":"2025-12-22","miles":9.0},{"week_start":"2025-12-29","miles":13.98},{"week_start":"2026-01-05","miles":11.0},{"week_start":"2026-01-19","miles":10.06},{"week_start":"2026-01-26","miles":17.51},{"week_start":"2026-02-02","miles":11.18},{"week_start":"2026-02-09","miles":29.04},{"week_start":"2026-02-16","miles":25.5},{"week_start":"2026-02-23","miles":32.02},{"week_start":"2026-03-02","miles":24.0},{"week_start":"2026-03-09","miles":27.52},{"week_start":"2026-03-16","miles":32.02},{"week_start":"2026-03-23","miles":27.99},{"week_start":"2026-03-30","miles":27.01},{"week_start":"2026-04-06","miles":20.02},{"week_start":"2026-04-13","miles":27.52},{"week_start":"2026-04-20","miles":42.66},{"week_start":"2026-04-27","miles":30.03},{"week_start":"2026-05-04","miles":38.49},{"week_start":"2026-05-11","miles":32.32},{"week_start":"2026-05-18","miles":30.86}];
@@ -1010,16 +1011,25 @@ function parseMsgSession(d) {
   const sport = SPORTS[d[5]] || String(d[5] || '');
   const speed = d[124] || d[14];
   const maxspeed = d[125] || d[15];
+  // Apply FIT scale factors to raw integer fields
+  // total_distance scale=100 (cm→m), timer_time scale=1000 (ms→s)
+  // avg/max speed (d[14],d[15]) scale=1000; enhanced (d[124],d[125]) already scaled
+  const dist_m   = d[9]  != null ? d[9]  / 100  : null;
+  const timer_s  = d[8]  != null ? d[8]  / 1000 : null;
+  const elapsed_s= d[7]  != null ? d[7]  / 1000 : null;
+  // enhanced speed fields are already in m/s; legacy fields need /1000
+  const spd = d[124] != null ? d[124] : (d[14] != null ? d[14]/1000 : null);
+  const mxs = d[125] != null ? d[125] : (d[15] != null ? d[15]/1000 : null);
   return {
     sport,
     sub_sport: SUB_SPORTS[d[6]] || String(d[6] || ''),
     start_time: fitDatetime(d[2]),
     date_str: fitDate(d[2]),
-    total_distance: d[9],
-    total_timer_time: d[8],
-    total_elapsed_time: d[7],
-    avg_speed: speed,
-    max_speed: maxspeed,
+    total_distance: dist_m,
+    total_timer_time: timer_s,
+    total_elapsed_time: elapsed_s,
+    avg_speed: spd,
+    max_speed: mxs,
     avg_hr: d[16],
     max_hr: d[17],
     avg_cadence: d[18],
@@ -1031,9 +1041,9 @@ function parseMsgSession(d) {
     num_laps: d[26],
     name: d[110] || '',
     // Derived
-    distance_mi: metersToMiles(d[9]),
-    avg_pace: speedToPace(speed),
-    pace_secs: speed ? Math.round(1609.34 / speed) : null,
+    distance_mi: metersToMiles(dist_m),
+    avg_pace: speedToPace(spd),
+    pace_secs: spd ? Math.round(1609.34 / spd) : null,
     elevation_gain_ft: metersToFeet(d[22]),
     avg_cadence_spm: cadenceSPM(d[18]),
   };
@@ -1042,24 +1052,30 @@ function parseMsgSession(d) {
 function parseMsgLap(d) {
   const speed = d[110] || d[13];
   const maxspeed = d[111] || d[14];
+  // Apply same scale factors as session
+  const ldist_m  = d[9]  != null ? d[9]  / 100  : null;
+  const ltimer_s = d[8]  != null ? d[8]  / 1000 : null;
+  const lspd = d[110] != null ? d[110] : (d[13] != null ? d[13]/1000 : null);
+  const lmxs = d[111] != null ? d[111] : (d[14] != null ? d[14]/1000 : null);
+  const lasc = d[29] != null ? d[29] : (d[21] != null ? d[21] : null);
   return {
     lap_num: (d[254] !== null && d[254] !== undefined) ? d[254] + 1 : null,
     start_time: fitDatetime(d[2]),
-    total_distance: d[9],
-    total_timer_time: d[8],
-    avg_speed: speed,
-    max_speed: maxspeed,
+    total_distance: ldist_m,
+    total_timer_time: ltimer_s,
+    avg_speed: lspd,
+    max_speed: lmxs,
     avg_hr: d[15],
     max_hr: d[16],
     avg_cadence: d[17],
     total_calories: d[11],
-    total_ascent: d[29] || d[21],
+    total_ascent: lasc,
     lap_trigger: d[24],
     // Derived
-    distance_mi: metersToMiles(d[9]),
-    avg_pace: speedToPace(speed),
-    pace_secs: speed ? Math.round(1609.34 / speed) : null,
-    elevation_gain_ft: metersToFeet(d[29] || d[21]),
+    distance_mi: metersToMiles(ldist_m),
+    avg_pace: speedToPace(lspd),
+    pace_secs: lspd ? Math.round(1609.34 / lspd) : null,
+    elevation_gain_ft: metersToFeet(lasc),
     avg_cadence_spm: cadenceSPM(d[17]),
   };
 }
@@ -2430,6 +2446,7 @@ function rebuildAggregates() {
 updateCountdown();
 buildOverview();
 setInterval(updateCountdown, 60000);
+
 
 </script>
 </body>
